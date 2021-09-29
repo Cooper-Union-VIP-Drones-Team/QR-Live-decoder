@@ -14,6 +14,7 @@ def decoder(image):
     gray_img = cv2.cvtColor(image, 0)
     qr = decode(gray_img)
     for obj in qr:
+
         points = obj.polygon
         # box the qr
         (x, y, w, h) = obj.rect
@@ -21,23 +22,29 @@ def decoder(image):
         pt = pt.reshape((-1, 1, 2))
         cv2.polylines(image, [pt], True, (128, 0, 128), 2)
 
-        qr_data = obj.data.decode("utf-8")
-        string = str(qr_data)
-        # display box and qr info on the screen
-        cv2.putText(frame, string, (x, y), cv2.QT_FONT_NORMAL, 0.7, (255, 255, 255), 1)
-        print("QR Reads:" + qr_data)
-
         # find dimension and place of qr code in picture
         # ref point top left corner
-        left = qr[0].rect[0]
-        top = qr[0].rect[1]
-        width = qr[0].rect[2]
-        height = qr[0].rect[3]
+        left = str(qr[0].rect[0])
+        top = str(qr[0].rect[1])
+        width = str(qr[0].rect[2])
+        height = str(qr[0].rect[3])
         # dim = gray_img.shape
         # add size = {dim} for camera pixel size
-        print(f' left = {left}, top = {top}, width = {width}, height = {height}')
+        location = str(f' left = {left}, top = {top}, width = {width}, height = {height}')
         # Sophia's laptop camera size: 480*640 pixel
+        qr_data = obj.data.decode("utf-8")
+        newline = str("\n")
+        string = str(qr_data)
+        test=string+newline+location
+        # display box and qr info on the screen
+        cv2.putText(frame, test, (x, y), cv2.QT_FONT_NORMAL, 0.7, (255, 255, 255), 1)
+        print("QR Reads:" + qr_data)
+        print(f' left = {left}, top = {top}, width = {width}, height = {height}')
 
+
+        #qr = cv2.QRCodeDetector()
+        #retval, decoded_info, points, straight_qrcode = qr.detectAndDecodeMulti(np.hstack([gray_img, gray_img]))
+        #print("multiple:", retval)  # False
 
 # OpenCV code to turn on live camera
 cap = cv2.VideoCapture(0)
