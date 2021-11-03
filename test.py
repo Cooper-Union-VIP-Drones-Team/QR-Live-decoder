@@ -45,15 +45,19 @@ def decoder(image):
             if str0 != "":
                 str1 = str0.split()
                 data1.append(str1)
-                print(str0)
-                print(str1)
-                print(data1[len(data1) - 1])
+                # print(str0)
+                # print(str1)
+                # print(data1[len(data1) - 1])
                 print(len(data1))
             for word in data1:
                 if word not in dataList:
                     dataList.append(word)
             print(len(dataList))
-           # i += 1
+            rectangle = np.array([pt1, pt2, pt3, pt4], np.int32)
+            cv2.polylines(image, [rectangle], True, (128, 0, 128), 2)
+            cv2.putText(frame, str0, pt1, cv2.QT_FONT_NORMAL, 0.3, (255, 255, 255), 1)
+
+        # i += 1
     # if keyboard.is_pressed('1'):
             # print(data1[1])
                 # print(data1[len(data1)-2])
