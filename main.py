@@ -15,9 +15,11 @@ import multiple_qr as multi
 # https://github.com/NaturalHistoryMuseum/pyzbar
 # fixed by installing C++ 2013
 
-
+data1 = []
+dataList = []
 # decoder func
 def decoder(image):
+
     gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     qr = decode(gray_img)
     CVdecoder = cv2.QRCodeDetector()
@@ -33,16 +35,17 @@ def decoder(image):
             pt2 = [int(val) for val in points[1]]
             pt3 = [int(val) for val in points[2]]
             pt4 = [int(val) for val in points[3]]
+
             # use pt1 and pt2 to find the slope, arctan to find the angle
             if pt1[0] == pt2[0]:
                 angle = 90
             else:
                 slope = ((pt1[1] - pt2[1]) / (pt1[0] - pt2[0]))
-                angle = np.arctan(slope) * 180 / np.pi
+                angle = "{:.2f}".format(np.arctan(slope) * 180 / np.pi)
             x = int(pt1[0])
             y = int(pt1[1])
+
             print("top left corner location is x = ",  pt1[0], " y = ",  pt1[1])
-            print('Decoded data: ' + CVdata)
             print(angle)
         points = obj.polygon
         # box the qr
@@ -57,9 +60,24 @@ def decoder(image):
 
         qr_data = obj.data.decode("utf-8")
         qr_read = str(qr_data)
+        str0 = str(qr_data)
+        if str0 != "":
+            str1 = str0.split()
+            data1.append(str1.copy())
+            # print(str0)
+            # print(str1)
+            # print(data1[len(data1) - 1])
+            print(len(data1))
+        for word in data1:
+            if word not in dataList:
+                dataList.append(word)
+        print(len(dataList))
+        print(dataList[len(dataList)-1])
+        print(qr_read)
         # display box and qr info on the screen, print qr read and location data
         cv2.putText(frame, qr_read, (x, y), cv2.QT_FONT_NORMAL, 0.3, (255, 255, 255), 1)
-
+        # print(qr_read)
+        print(CVdata)
 
 # OpenCV code to turn on live camera
 cap = cv2.VideoCapture(0)
